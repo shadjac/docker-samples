@@ -1,0 +1,14 @@
+FROM ruby:latest
+ARG DEBIAN_FRONTEND=noninteractive
+ENV INSTALL_PATH /drkiq
+RUN mkdir -p $INSTALL_PATH
+WORKDIR $INSTALL_PATH
+# cant mount while building
+RUN apt-get update -y
+RUN apt-get install nodejs dumb-init -y
+COPY . .
+RUN bundle install --path .bundle
+RUN RAILS_ENV=development bundle exec rake db:create db:migrate
+EXPOSE 3000
+#ENTRYPOINT ["/usr/bin/dumb-init", "--"]
+CMD RAILS_ENV=development bundle exec rails server
