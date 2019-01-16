@@ -1,0 +1,16 @@
+FROM nginx:latest
+RUN apt-get update && apt-get install vim telnet -y
+# DEMO 1
+#ENTRYPOINT ["/bin/echo", "Hello"]
+#CMD ["world"]
+# DEMO 2
+#ENTRYPOINT ["/bin/echo", "Hello"]
+#CMD ["world"]
+# DEMO 3
+#ENV name sheldon
+#ENTRYPOINT ["/bin/bash", "-c", "echo Hello, $name"]
+#ENTRYPOINT ["/bin/echo", "Hello $name"]
+#ENTRYPOINT echo hello $name
+# DEMO 4
+ENTRYPOINT echo Hello
+CMD ["world"]
