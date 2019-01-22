@@ -1,0 +1,44 @@
+version: "3.2"
+networks:
+  frontendnet:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.22.0.0/24
+  backendnet:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.23.0.0/24
+
+services:
+  frontend:
+    networks:
+      frontendnet:
+        ipv4_address: 172.22.0.3
+
+    image: shadjachaudhari/nginx:extra_packages
+    ports:
+      - 8080:8080
+
+  db:
+    networks:
+      backendnet:
+        ipv4_address: 172.23.0.4
+    image: shadjachaudhari/mysql:extra_packages
+    environment:
+      - MYSQL_ROOT_PASSWORD=abc
+    ports:
+      - 3306:3306
+
+  backend:
+    networks:
+      frontendnet:
+        ipv4_address: 172.22.0.5
+      backendnet:
+        ipv4_address: 172.23.0.5
+    image: shadjachaudhari/nginx:extra_packages
+
+    
