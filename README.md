@@ -1,19 +1,17 @@
-[TOC]
-
-#### Disabled options
-#### Run a container:busybox, start PID1 process
+## Docker Begins
+#### Run a container:busybox and start first process -  PID 1
 syntax `docker run <image>`
 ```bash
 docker run busybox echo hello
 docker run busybox cat /etc/hostname
 ```
-[container exits as PID 1 has done its job and terminated]
+> container exits as PID 1 has done its job and terminated
 ```
 docker run busybox sleep 300
 containerid=$(docker ps | awk 'NR > 1 {print $1}')
 docker top $containerid
 ```
-[PID 1 would be 'sleep 300']
+> PID 1 would be 'sleep 300'
 #### Exit foreground container in different ways
 exit
 ctrl+c
@@ -23,7 +21,7 @@ Interactive containers are useful when you are putting together your own image. 
 docker run --interactive --tty ubuntu
 apt-get update && apt-get install telnet git -y
 ```
-[stops container by exiting --tty]
+> stops container by exiting --tty
 #### Run container in background - detached mode
 ```
 docker run -d ubuntu
@@ -42,7 +40,7 @@ docker stop
 docker run -it ubuntu
 ctrl+p Ctrl+q
 ```
-[tty exits but container still runs in background]
+> tty exits but container still runs in background
 #### Write dockerfile and build image: nginx with telnet,git
 - upper case for DIRECTIVEs
 - each Directive is considered as difference in file system, is run in an intermediate container. notice docker build log lines:
@@ -69,7 +67,7 @@ RUN apt-get install telnet git -y
 RUN git clone https://github.com/shadjachaudhari13/nodefun
 EOF
 ```
-[note build context is 100s of KBs]
+> note build context is 100s of KBs
 ```
 cd ..
 mkdir testDir && cd testDir
@@ -80,7 +78,7 @@ RUN apt-get install telnet git -y
 RUN git clone https://github.com/shadjachaudhari13/nodefun
 EOF
 ```
-[note build context is couple of KBs. Current directory and sub directories are set to build context. keep only required files along with Dockerfile]
+> note build context is couple of KBs. Current directory and sub directories are set to build context. keep only required files along with Dockerfile
 ##### cache: reuse existing layers
 ```
 docker build . -f-<<EOF
@@ -103,7 +101,7 @@ docker push shadjachaudhari/nginx:mydemo
 docker tag <image-id> shadjachaudhari/nginx
 docker push shadjachaudhari/nginx
 ```
-[when tag not mentioned latest tag is applied,replaced]
+> when tag not mentioned latest tag is applied,replaced
 ##### Use your own image as base image
 ```
 docker build . -f-<<EOF
@@ -111,11 +109,11 @@ FROM shadjachaudhari/nginx:mydemo
 RUN echo hello
 ```
 #### VOLUME
-- share code repo on the host with docker container, dynamic changes to app and test quickly
-- store gems/requirements in volume and share such volume with app container. this way dependencies can be cached and reused while only new ones will be added/removed
-- VOLUME directive in dockerfile makes sure a mount point is initialized when container runs
-- containers can share volumes with each other
-- sharing data is not same as copying data into containers
+> share code repo on the host with docker container, dynamic changes to app and test quickly
+> store gems/requirements in volume and share such volume with app container. this way dependencies can be cached and reused while only new ones will be added/removed
+> VOLUME directive in dockerfile makes sure a mount point is initialized when container runs
+> containers can share volumes with each other
+> sharing data is not same as copying data into containers
 ```
 docker run -d -v /Users/shadjachaudhari13/my-github/default.conf:/etc/nginx/conf.d/default.conf shadjachaudhari/nginx:mydemo
 docker commit <container id> shadjachaudhari/nginx:mynewdemo
@@ -128,7 +126,7 @@ git clone https://github.com/shadjachaudhari13/rubyfun.git
 docker-compose build
 docker-compose up
 ```
-[volume "bundle" is shared by container "box" at path /box and container "app" at path /gems. Note that the mount paths are different]
+> volume "bundle" is shared by container "box" at path /box and container "app" at path /gems. Note that the mount paths are different
 
 #### COPY
 ```
@@ -140,41 +138,39 @@ docker run -d <image-id>
 docker commit <container id> shadjachaudhari/nginx:mynewdemo
 docker run -it shadjachaudhari/nginx:mynewdemo cat /etc/nginx/conf.d/default.conf
 ```
-- COPY src dest
-- COPY copies files along with their permissions
-- src is relative to Dockerfile, dest is absolute path inside container
+> COPY src dest
+> COPY copies files along with their permissions
+> src is relative to Dockerfile, dest is absolute path inside container
 #### WORKDIR
-- sets current working directory for instructions RUN, CMD, ENTRYPOINT, COPY and ADD while building Dockerfile
-- WORKDIR and build context are different from each other
-- WORKDIR will be created if not existing already, could be a blank folder too
-- useful if the executable/artifacts you want to run when container starts are located somewhere in subdirectories
-- not recommended to use RUN cd .. like commands
-- keep app files in separate dir than root, avoid clutter
-[goblin demo]
+> sets current working directory for instructions RUN, CMD, ENTRYPOINT, COPY and ADD while building Dockerfile
+> WORKDIR and build context are different from each other
+> WORKDIR will be created if not existing already, could be a blank folder too
+> useful if the executable/artifacts you want to run when container starts are located somewhere in subdirectories
+> not recommended to use RUN cd .. like commands
+> keep app files in separate dir than root, avoid clutter
 #### ENV
 - variables used in Dockerfiles
-[PORT node-fun demo]
-#### Modify app dynamically using volumes: node-fun
-[foo=bar foo=tar]
+[PORT nodefun ARG vs ENV demo] (https://github.com/shadjachaudhari13/nodefun/blob/master/Dockerfile)
+#### Modify app dynamically using volumes: nodefun
+[Dynamic update demo] (https://github.com/shadjachaudhari13/nodefun/blob/master/index.js)
 ##### give up sudo privilleges
-[demo uid]
+[why not to run container as root](./uid-demo-Dockerfile)
 ```
 sudo chmod 600 secrets.txt
 docker build -f uid-demo-Dockerfile --no-cache .
 docker run <image-id>
 ```
 #### write docker compose for single container app
-docker-compose ps
-docker-compose down/up/build
-docker-compose volumes
+- docker-compose ps
+- docker-compose down/up/build/kill/rm
 build dockerfile in some other directory
-[write docker compose for node-fun]
+> write docker compose for nodefun
 #### write docker compose with networks
-[demo nginx with host network and keep changing PORT]
-[demo docker-compose networks]
-- multiple networks in one compose file
-- one container can get multiple IPs as it can belong to multiple networks
-[docker-compose network yaml]
+[demo nginx with host network] (./docker-compose-nginx.yaml)
+[keep changing PORT] (./default.conf)
+[demo docker-compose networks] (./docker-compose-networks.yaml)
+> multiple networks in one compose file
+> one container can get multiple IPs as it can belong to multiple networks
 #### How to build parent image?
 Build from scratch: your first layer of fs
 debootstrap to tar
@@ -191,7 +187,7 @@ docker-machine create -d "virtualbox" project2
 docker-machine env project2
 eval $(docker-machine env project1)
 ```
-- notice docker_host URL. IP address for each VM is different
+> notice docker_host URL. IP address for each VM is different
 ##### Run docker command on mac but connect to docker daemon running in docker-machine
 `docker -H tcp://192.168.99.102:2376 --tlsverify --tlscert /Users/shadjachaudhari13/.docker/machine/machines/project1/cert.pem --tlscacert /Users/shadjachaudhari13/.docker/machine/machines/project1/ca.pem --tlskey /Users/shadjachaudhari13/.docker/machine/machines/project1/key.pem --tls ps`
 ##### To SSH into docker-machine
@@ -203,12 +199,12 @@ ping 192.168.99.102:80 # without publishing port on container
 ping 172.17.0.2 
 ```
 #### docker desktop for mac
-- Find symlinks
+> Find symlinks
 `find $(which docker) -type l -ls`
-- Mac native application, that you install in /Applications
+> Mac native application, that you install in /Applications
 `find /var/run/docker.sock -type l -ls`
-- hyperkit does not use docker-machine to create VM. docker-machine and docker desktop for mac can co-exist.
-- gives only one VM to run a docker daemon
+> hyperkit does not use docker-machine to create VM. docker-machine and docker desktop for mac can co-exist.
+> gives only one VM to run a docker daemon
 ##### switch between docker desktop and docker toolbox
 ```
 unset ${!DOCKER_*} #stop using docker-machine if any
