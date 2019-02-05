@@ -277,6 +277,13 @@ docker-compose -f docker-compose-v2.yaml up # all layers exists
 #### Modify app dynamically using volumes: nodefun
 [Dynamic update demo] (https://github.com/shadjachaudhari13/nodefun/blob/master/index.js)
 
+```
+https://github.com/shadjachaudhari13/nodefun.git
+cd nodefun
+docker-compose up --build --force-recreate
+# change index.js
+docker-compose up --force-recreate
+
 ##### give up sudo privilleges
 [why not to run container as root](./uid-demo-Dockerfile)
 ```
