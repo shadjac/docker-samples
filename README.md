@@ -221,6 +221,8 @@ docker push shadjachaudhari/nodefun:mydemo
 docker tag <image-id> shadjachaudhari/nodefun
 docker push shadjachaudhari/nodefun
 ```
+> docker pull fetches independent layers in parallel
+
 > when tag not mentioned latest tag is applied,replaced
 
 ##### Use your own image as base image
@@ -240,14 +242,33 @@ RUN echo hello
 
 > sharing data is not same as copying data into containers
 
+## Docker Compose Rises
+
 #### docker compose volumes: use case: dependencies in separate container from app
 ```
 git clone https://github.com/shadjachaudhari13/rubyfun.git
-docker-compose up --build
+cd rubyfun
+docker-compose -f docker-compose-v1.yaml up --build
 ```
 > source code shared at /rubyfun
 
-> volume "bundle" is shared by container "box" at path /box and container "app" at path /gems. Note that the mount paths are different
+> dependency are getting installed everytime. can they be reused?
+```
+docker-compose -f docker-compose-v2.yaml up --build
+docker-compose -f docker-compose-v2.yaml up --build
+docker volume ls
+docker images
+```
+> name of docker image built by docker-compose
+Note: ruby image is 900mb. Lets save it offline.
+
+```
+docker save -o rubyfun.tar <image-id>
+docker rmi -f $(docker images -q)
+docker-compose -f docker-compose-v2.yaml up --build # kill process when you see layers are being pulled freshly
+docker load -i rubyfun.tar
+docker-compose -f docker-compose-v2.yaml up # all layers exists
+```
 
 #### ENV
 - variables used in Dockerfiles
@@ -270,10 +291,10 @@ docker run <image-id>
 > multiple networks in one compose file
 > one container can get multiple IPs as it can belong to multiple networks
 
-#### How to build parent image?
+#### How to build parent image? Ways to create images?
 > Build from scratch: your first layer of fs
 
 > debootstrap to tar
 example https://github.com/tianon/docker-brew-ubuntu-core/blob/185c5e23efaa8c7c857683e6dcf4d886acda3cba/trusty/Dockerfile
 
-
+> docker commit <container-id> shadjachaudhari?rubyfun:latest
