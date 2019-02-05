@@ -31,9 +31,10 @@ eval $(docker-machine env project1)
 unset ${!DOCKER_*} #stop using docker-machine if any
 eval $(docker-machine env project1) #set env variables to use a docker-machine
 ```
-
+[SKIP]
 ##### Run docker command on mac but connect to docker daemon running in docker-machine
 `docker -H tcp://192.168.99.102:2376 --tlsverify --tlscert /Users/shadjachaudhari13/.docker/machine/machines/project1/cert.pem --tlscacert /Users/shadjachaudhari13/.docker/machine/machines/project1/ca.pem --tlskey /Users/shadjachaudhari13/.docker/machine/machines/project1/key.pem --tls ps`
+[SKIP]
 
 ##### To SSH into docker-machine
 ```
@@ -268,9 +269,11 @@ docker run <image-id>
 [demo docker-compose networks] (./docker-compose-networks.yaml)
 > multiple networks in one compose file
 > one container can get multiple IPs as it can belong to multiple networks
+
 #### How to build parent image?
-Build from scratch: your first layer of fs
-debootstrap to tar
+> Build from scratch: your first layer of fs
+
+> debootstrap to tar
 example https://github.com/tianon/docker-brew-ubuntu-core/blob/185c5e23efaa8c7c857683e6dcf4d886acda3cba/trusty/Dockerfile
 
 
