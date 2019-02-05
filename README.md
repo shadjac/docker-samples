@@ -1,4 +1,41 @@
 ## Docker Begins
+
+## Installations
+docker
+docker-compose
+docker-machine (from docker toolbox)
+### docker toolbox on mac
+```
+docker-machine create -d "virtualbox" project1
+docker-machine env project1
+docker-machine create -d "virtualbox" project2
+docker-machine env project2
+eval $(docker-machine env project1)
+```
+> notice docker_host URL. IP address for each VM is different
+##### Run docker command on mac but connect to docker daemon running in docker-machine
+`docker -H tcp://192.168.99.102:2376 --tlsverify --tlscert /Users/shadjachaudhari13/.docker/machine/machines/project1/cert.pem --tlscacert /Users/shadjachaudhari13/.docker/machine/machines/project1/ca.pem --tlskey /Users/shadjachaudhari13/.docker/machine/machines/project1/key.pem --tls ps`
+##### To SSH into docker-machine
+```
+docker-machine ssh project1
+ifconfig #Notice docker0 interface
+docker run -d nginx
+ping 192.168.99.102:80 # without publishing port on container
+ping 172.17.0.2 
+```
+#### docker desktop for mac
+> Find symlinks
+`find $(which docker) -type l -ls`
+> Mac native application, that you install in /Applications
+`find /var/run/docker.sock -type l -ls`
+> hyperkit does not use docker-machine to create VM. docker-machine and docker desktop for mac can co-exist.
+> gives only one VM to run a docker daemon
+##### switch between docker desktop and docker toolbox
+```
+unset ${!DOCKER_*} #stop using docker-machine if any
+eval $(docker-machine env project1) #set env variables to use a docker-machine
+```
+
 #### Run a container:busybox and start first process -  PID 1
 syntax `docker run <image>`
 ```bash
@@ -175,39 +212,5 @@ build dockerfile in some other directory
 Build from scratch: your first layer of fs
 debootstrap to tar
 example https://github.com/tianon/docker-brew-ubuntu-core/blob/185c5e23efaa8c7c857683e6dcf4d886acda3cba/trusty/Dockerfile
-## Installations
-docker
-docker-compose
-docker-machine (from docker toolbox)
-### docker toolbox on mac
-```
-docker-machine create -d "virtualbox" project1
-docker-machine env project1
-docker-machine create -d "virtualbox" project2
-docker-machine env project2
-eval $(docker-machine env project1)
-```
-> notice docker_host URL. IP address for each VM is different
-##### Run docker command on mac but connect to docker daemon running in docker-machine
-`docker -H tcp://192.168.99.102:2376 --tlsverify --tlscert /Users/shadjachaudhari13/.docker/machine/machines/project1/cert.pem --tlscacert /Users/shadjachaudhari13/.docker/machine/machines/project1/ca.pem --tlskey /Users/shadjachaudhari13/.docker/machine/machines/project1/key.pem --tls ps`
-##### To SSH into docker-machine
-```
-docker-machine ssh project1
-ifconfig #Notice docker0 interface
-docker run -d nginx
-ping 192.168.99.102:80 # without publishing port on container
-ping 172.17.0.2 
-```
-#### docker desktop for mac
-> Find symlinks
-`find $(which docker) -type l -ls`
-> Mac native application, that you install in /Applications
-`find /var/run/docker.sock -type l -ls`
-> hyperkit does not use docker-machine to create VM. docker-machine and docker desktop for mac can co-exist.
-> gives only one VM to run a docker daemon
-##### switch between docker desktop and docker toolbox
-```
-unset ${!DOCKER_*} #stop using docker-machine if any
-eval $(docker-machine env project1) #set env variables to use a docker-machine
-```
+
 
