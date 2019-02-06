@@ -1,5 +1,6 @@
 ## Docker Begins
 
+
 ### Installations
 docker
 docker-compose
@@ -242,7 +243,9 @@ RUN echo hello
 
 > sharing data is not same as copying data into containers
 
+
 ## Docker Compose Rises
+
 
 #### docker compose volumes: use case: dependencies in separate container from app
 ```
@@ -304,4 +307,4 @@ docker run <image-id>
 > debootstrap to tar
 example https://github.com/tianon/docker-brew-ubuntu-core/blob/185c5e23efaa8c7c857683e6dcf4d886acda3cba/trusty/Dockerfile
 
-> docker commit <container-id> shadjachaudhari?rubyfun:latest
+> docker commit <container-id> shadjachaudhari/rubyfun:latest
