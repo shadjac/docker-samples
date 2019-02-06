@@ -2,9 +2,14 @@
 
 
 ### Installations
-docker
-docker-compose
-docker-machine (from docker toolbox)
+> docker
+
+> docker-compose
+
+> docker-machine
+
+1. find your daemon
+2. docker info
 
 #### docker desktop for mac
 
@@ -44,6 +49,7 @@ docker run -d -p 8000:80 nginx  # browse <daemon ip>:8000 on mac's browser
 docker-machine ssh project1
 ping <docker-ip> # works
 docker run -d nginx
+ps aux | grep nginx
 ping <docker-ip> # works without exposing ports
 ```
 
