@@ -1,4 +1,4 @@
-## Docker Begins
+# Docker Begins
 
 
 ### Installations
@@ -244,7 +244,7 @@ RUN echo hello
 > sharing data is not same as copying data into containers
 
 
-## Docker Compose Rises
+# Docker Compose Rises
 
 
 #### docker compose volumes: use case: dependencies in separate container from app
