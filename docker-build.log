@@ -1,0 +1,43 @@
+shadjas-MacBook-Pro:nodeshark shadjachaudhari13$ docker build . --no-cache
+Sending build context to Docker daemon  97.28kB
+Step 1/10 : FROM node:10-alpine
+ ---> fe6ff768f798
+Step 2/10 : RUN mkdir -p /home/node/app
+ ---> Running in d5808723721a
+Removing intermediate container d5808723721a
+ ---> 1e35a5e2d923
+Step 3/10 : WORKDIR /home/node/app
+ ---> Running in 32647a1ae86a
+Removing intermediate container 32647a1ae86a
+ ---> 02b037d0d169
+Step 4/10 : COPY package*.json ./
+ ---> 69cf8591e44b
+Step 5/10 : RUN npm install
+ ---> Running in 01b3ed40e6e5
+npm notice created a lockfile as package-lock.json. You should commit this file.
+npm WARN nodejs-image-demo@1.0.0 No repository field.
+
+added 48 packages from 36 contributors and audited 121 packages in 2.275s
+found 0 vulnerabilities
+
+Removing intermediate container 01b3ed40e6e5
+ ---> c8991ca2dd09
+Step 6/10 : COPY . .
+ ---> 960384a51d38
+Step 7/10 : ENV PORT 5000
+ ---> Running in 96daae9603fc
+Removing intermediate container 96daae9603fc
+ ---> 640e7640f1f9
+Step 8/10 : ARG PORT=5000
+ ---> Running in 1b3f5ed38e8e
+Removing intermediate container 1b3f5ed38e8e
+ ---> 11c9c6a95c1a
+Step 9/10 : EXPOSE $PORT
+ ---> Running in 68ad5f69661f
+Removing intermediate container 68ad5f69661f
+ ---> 32c1f39e8276
+Step 10/10 : CMD [ "node", "app.js" ]
+ ---> Running in 3d20f60058e6
+Removing intermediate container 3d20f60058e6
+ ---> 473b4d6cd2f5
+Successfully built 473b4d6cd2f5
