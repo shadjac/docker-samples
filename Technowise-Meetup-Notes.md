@@ -43,35 +43,66 @@
 #### <switch to shell session: tab 2 from Line 12>
 
 `$ docker exec -it <container 1> sh` # opens door to already running container
-wget http://localhost:5050 # index.html is downloaded
-exit # come out of container, this also stops the container
-docker rm <container 1 ID> # removes the stopped container
+
+`$ wget http://localhost:5050` # index.html is downloaded
+
+`$ exit` # come out of container, this also stops the container
+
+`$ docker rm <container 1 ID>` # removes the stopped container
+
 "CMD node app.js" add this as last line in crude.Dockerfile
-docker build -f crude.Dockerfile .
-docker run -d -p 5050:5050 <image-id>.  # this is {container 2}
+
+`$ docker build -f crude.Dockerfile .`
+
+`$ docker run -d -p 5050:5050 <image-id>.`  # this is {container 2}
+
 [access application in web browser localhost:5050]
-docker exec -it <container 2> sh
-whoami # show "root" default user is root unless specified otherwise
-ls # contents of nodeshark dir
-pwd # shows just "/"
-uname -a # shows alpine linux distribution
-printenv # show PORT as environment variable set 
-ls node_modules # node packages downloaded by "npm install"
-exit
+
+`$ docker exec -it <container 2> sh`
+
+`$ whoami` # show "root" default user is root unless specified otherwise
+
+`$ ls` # contents of nodeshark dir
+
+`$ pwd` # shows just "/"
+
+`$ uname -a` # shows alpine linux distribution
+
+`$ printenv` # show PORT as environment variable set 
+
+`$ ls node_modules` # node packages downloaded by "npm install"
+
+`$ exit`
+
 [Let's build same dockerfile again.]
-docker build -f crude.Dockerfile .
+
+`$ docker build -f crude.Dockerfile .`
+
 [all build log lines say "using cache"]
+
 add "RUN ls -la node_modules" before "CMD node app.js" in crude.Dockerfile
-docker build -f crude.Dockerfile .
-docker build . --no-cache
-docker build <git repo url>
-docker tag <image-id> <repo-name>:<tag>
-docker tag 12345678 your-name/nodeshark:mydemo
-docker push your-name/nodeshark:mydemo
-which docker # see what you installed where you installed
-git clone https://github.com/shadjachaudhari13/expense-tracker-nodejs.git
-cd expense-tracker-nodejs
-docker-compose up
-docker-compose -f docker-compose-with-persist-data.yaml up
-docker-compose -f docker-compose-node-dependencies.yaml up
+
+`$ docker build -f crude.Dockerfile .`
+
+`$ docker build . --no-cache`
+
+`$ docker build <git repo url>`
+
+`$ docker tag <image-id> <repo-name>:<tag>`
+
+`$ docker tag 12345678 your-name/nodeshark:mydemo`
+
+`$ docker push your-name/nodeshark:mydemo`
+
+`$ which docker` # see what you installed where you installed
+
+`$ git clone https://github.com/shadjachaudhari13/expense-tracker-nodejs.git`
+
+`$ cd expense-tracker-nodejs`
+
+`$ docker-compose up`
+
+`$ docker-compose -f docker-compose-with-persist-data.yaml up`
+
+`$ docker-compose -f docker-compose-node-dependencies.yaml up`
 
